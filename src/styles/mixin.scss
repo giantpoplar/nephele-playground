@@ -1,0 +1,9 @@
+$blue: #409EFF;
+$regularTextColor: #606266;
+$secondaryTextColor: #909399;
+
+@mixin fa($type: center) {
+	display: flex;
+  flex-direction: row;
+  align-items: $type;
+}
