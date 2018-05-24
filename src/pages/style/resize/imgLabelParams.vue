@@ -2,41 +2,69 @@
   <div class="img_label_params_container" v-if="selectedResizeType !== null">
     <div class="input_wrapper" v-if="isWidthParmShow">
       <span>宽度</span>
-      <el-input placeholder="1-9999" v-model="inputWidth" class="number_input" size="medium" type="number" min="1" max="9999">
+      <el-input placeholder="1-9999" v-model="width" class="number_input"  type="number" min="1" max="9999">
         <template slot="append">PX</template>
       </el-input>
     </div>
     <div class="input_wrapper" v-if="isHeightParmShow">
       <span>高度</span>
-      <el-input placeholder="1-99999" v-model="inputHeight" class="number_input" size="medium" type="number" min="1" max="9999">
+      <el-input placeholder="1-99999" v-model="height" class="number_input" type="number" min="1" max="9999">
         <template slot="append">PX</template>
       </el-input>
     </div>
     <div class="input_wrapper" v-if="selectedResizeType === 'resize-wh-percent'">
       <span>原图缩放</span>
-      <el-input placeholder="1-999" v-model="inputZoomPercent" class="number_input" size="medium" type="number" min=1 max=999>
+      <el-input placeholder="1-999" v-model="percent" class="number_input" type="number" min=1 max=999>
         <template slot="append">%</template>
       </el-input>
     </div>
     <div class="input_wrapper">
       <span>允许结果图大于原图</span>
-      <el-switch v-model="limitResultSize">
+      <el-switch v-model="limit">
       </el-switch>
     </div>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   data () {
-    return {
-      inputWidth: 200,
-      inputHeight: 200,
-      inputZoomPercent: 50,
-      limitResultSize: true
-    }
+    return {}
   },
   computed: {
+    width: {
+      get () {
+        return this.$store.state.userImgStyle.resizeWidth
+      },
+      set (value) {
+        this.SET_RESIZE_WIDTH(value)
+      }
+    },
+    height: {
+      get () {
+        return this.$store.state.userImgStyle.resizeHeight
+      },
+      set (value) {
+        this.SET_RESIZE_HEIGHT(value)
+      }
+    },
+    percent: {
+      get () {
+        return this.$store.state.userImgStyle.resizePercent
+      },
+      set (value) {
+        this.SET_RESIZE_PERCENT(value)
+      }
+    },
+    limit: {
+      get () {
+        return this.$store.state.userImgStyle.resizeLimit
+      },
+      set (value) {
+        this.SET_RESIZE_LIMIT(value)
+      }
+    },
     isWidthParmShow: function () {
       const t = this.selectedResizeType
       if (t === 'resize-w-h-auto' || t === 'resize-wh-contain' || t === 'resize-wh-force') {
@@ -58,7 +86,15 @@ export default {
       return true
     }
   },
-  props: ['selectedResizeType']
+  props: ['selectedResizeType'],
+  methods: {
+    ...mapMutations([
+      'SET_RESIZE_WIDTH',
+      'SET_RESIZE_HEIGHT',
+      'SET_RESIZE_PERCENT',
+      'SET_RESIZE_LIMIT'
+    ])
+  }
 }
 </script>
 

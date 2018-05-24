@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 import resizeHWAuto from '../../../assets/resize_type/resize-h-w-auto.png'
 import resizeWHAuto from '../../../assets/resize_type/resize-w-h-auto.png'
 import resizeWHContain from '../../../assets/resize_type/resize-wh-contain.png'
@@ -22,7 +23,6 @@ import imgLabelParams from './imgLabelParams.vue'
 export default {
   data () {
     return {
-      selectedResizeType: this.initResizeType,
       allResizeTypes: {
         'resize-h-w-auto': {description: '高度固定, 宽度自适应', img: resizeHWAuto},
         'resize-w-h-auto': {description: '宽度固定, 高度自适应', img: resizeWHAuto},
@@ -35,11 +35,24 @@ export default {
   components: {
     imgLabelParams
   },
-  props: ['listTypes', 'initResizeType'],
-  watch: {
-    initResizeType: function (newValue, oldValue) {
-      this.selectedResizeType = newValue
+  computed: {
+    ...mapState({
+      resizeMode: state => state.userImgStyle.resizeMode
+    }),
+    selectedResizeType: {
+      get () {
+        return this.$store.state.userImgStyle.resizeType[this.resizeMode]
+      },
+      set (value) {
+        this.SET_RESIZE_TYPE(value)
+      }
     }
+  },
+  props: ['listTypes'],
+  methods: {
+    ...mapMutations([
+      'SET_RESIZE_TYPE'
+    ])
   }
 }
 </script>

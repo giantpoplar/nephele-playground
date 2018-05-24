@@ -4,17 +4,18 @@
       <span class="sub_setting_label">选择原点</span>
       <div class="sub_setting_content">
         <gravity
-          :validGravity="['NorthWest', 'Center']"
+          :validGravity="validGravity"
           :initGravity="'NorthWest'"
           :gravityImg="gravityDemoImg"
-          :hint="'点击下图中的圆点，选取抠图原点'">
+          :hint="hint"
+          :cropType="cropType">
         </gravity>
       </div>
     </div>
     <div class="sub_setting_item">
       <span class="sub_setting_label">设置裁剪区域</span>
       <div class="sub_setting_content">
-        <crop-region cropType="2"></crop-region>
+        <crop-region :cropType="cropType"></crop-region>
       </div>
     </div>
     <div class="sub_setting_item" v-if="selectedGravity === 'NorthWest'">
@@ -28,15 +29,14 @@
 
 <script>
 import { mapState } from 'vuex'
-import gravityDemoImg from '../../../assets/crop/cutout-gravity.png'
+import cutMarginGravityDemoImg from '../../../assets/crop/cut-margin-gravity.png'
+import cutoutGravityDemoImg from '../../../assets/crop/cutout-gravity.png'
 import cropOffset from './cropOffset'
 import cropRegion from './cropRegion'
 import gravity from './gravity'
 export default {
   data () {
-    return {
-      gravityDemoImg: gravityDemoImg
-    }
+    return {}
   },
   components: {
     cropOffset,
@@ -45,9 +45,35 @@ export default {
   },
   computed: {
     ...mapState({
-      selectedGravity: state => state.userImgStyle.selectedGravity
-    })
-  }
+      selectedGravity: function (state) {
+        return state.userImgStyle.cropGravity[this.cropType]
+      }
+    }),
+    validGravity: function () {
+      const gravities = {
+        cutout: ['NorthWest', 'Center'],
+        cutMargin: ['North', 'West', 'Center', 'East', 'South']
+      }
+      return gravities[this.cropType]
+    },
+    gravityDemoImg: function () {
+      const demoImgs = {
+        cutout: cutoutGravityDemoImg,
+        cutMargin: cutMarginGravityDemoImg
+      }
+      return demoImgs[this.cropType]
+    },
+    hint: function () {
+      const hints = {
+        cutout: '点击下图中的圆点，选取抠图原点',
+        cutMargin: '点击下图中的圆点，选取裁边原点'
+      }
+      return hints[this.cropType]
+    }
+  },
+  props: [
+    'cropType'
+  ]
 }
 </script>
 

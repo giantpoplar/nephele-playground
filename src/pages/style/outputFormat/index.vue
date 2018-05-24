@@ -5,10 +5,10 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      outputFormat: 'same',
       formats: [
         {id: 'same', name: ' 与原图一致'},
         {id: 'jpg', name: 'JPG'},
@@ -17,6 +17,21 @@ export default {
         {id: 'gif', name: 'GIF'}
       ]
     }
+  },
+  computed: {
+    outputFormat: {
+      get () {
+        return this.$store.state.userImgStyle.format
+      },
+      set (value) {
+        this.SET_FORMAT(value)
+      }
+    }
+  },
+  methods: {
+    ...mapMutations([
+      'SET_FORMAT'
+    ])
   }
 }
 </script>

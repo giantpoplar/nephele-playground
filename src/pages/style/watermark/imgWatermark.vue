@@ -3,7 +3,7 @@
     <div class="sub_setting_item">
       <span class="sub_setting_label">水印图片</span>
       <div class="sub_setting_content">
-        <el-input placeholder="请输入图片URL" v-model="watermarkUrl" clearable class="watermark_url_input">
+        <el-input placeholder="请输入图片URL" v-model="watermarkName" clearable class="watermark_url_input">
         </el-input>
       </div>
     </div>
@@ -34,14 +34,31 @@
 import { formatPercent } from '@/utils'
 import srcImgWatermarkLimit from './srcImgWatermarkLimit'
 import watermarkPosition from './watermarkPosition'
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      watermarkUrl: '',
-      watermarkOpacity: 100,
       minWatermarkOpacity: 1,
       alignBaseline: {
         alignItems: 'baseline'
+      }
+    }
+  },
+  computed: {
+    watermarkName: {
+      get () {
+        return this.$store.state.userImgStyle.watermarkName
+      },
+      set (value) {
+        this.SET_WATERMARK_NAME(value)
+      }
+    },
+    watermarkOpacity: {
+      get () {
+        return this.$store.state.userImgStyle.watermarkOpacity
+      },
+      set (value) {
+        this.SET_WATERMARK_OPACITY(value)
       }
     }
   },
@@ -50,6 +67,10 @@ export default {
     watermarkPosition
   },
   methods: {
+    ...mapMutations([
+      'SET_WATERMARK_NAME',
+      'SET_WATERMARK_OPACITY'
+    ]),
     formatPercent
   }
 }

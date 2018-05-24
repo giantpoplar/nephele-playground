@@ -1,23 +1,37 @@
 <template>
   <div>
-  <customImg title="原图" :src="src"></customImg>
+  <img-viewer title="原图" :src="originUrl" :enableReload="false"></img-viewer>
   <div class="result_img_container">
-    <customImg title="运行结果" :src="src" ></customImg>
+    <img-viewer title="运行结果" :src="resultUrl" :enableReload="true"></img-viewer>
   </div>
   </div>
 </template>
 
 <script>
-import sohoImg from '../../../assets/soho.jpg'
-import customImg from './customImg'
+import { mapState } from 'vuex'
+import imgViewer from '@/components/imgViewer'
+// import sohoImg from '../../../assets/soho.jpg'
 export default {
   data () {
     return {
-      src: sohoImg
+      demoUri: 'image/demo-big.jpg'
+    }
+  },
+  computed: {
+    ...mapState({
+      host: state => state.app.nepheleService.host,
+      port: state => state.app.nepheleService.port,
+      cmd: state => state.userImgStyle.styleCmd
+    }),
+    originUrl: function () {
+      return `http://${this.host}:${this.port}/${this.demoUri}`
+    },
+    resultUrl: function () {
+      return `${this.originUrl}?${this.cmd}`
     }
   },
   components: {
-    customImg
+    imgViewer
   }
 }
 </Script>

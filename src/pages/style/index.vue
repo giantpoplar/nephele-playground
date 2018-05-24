@@ -12,8 +12,16 @@
           <crop class="cmd_detail"></crop>
         </div>
         <div class="cmd_item">
+          <span class="cmd_name">图片旋转</span>
+          <rotate class="cmd_detail"></rotate>
+        </div>
+        <div class="cmd_item">
           <span class="cmd_name">图片水印</span>
           <watermark class="cmd_detail"></watermark>
+        </div>
+        <div class="cmd_item">
+          <span class="cmd_name">自动旋正</span>
+          <auto-orient class="cmd_detail"></auto-orient>
         </div>
         <div class="cmd_item">
           <span class="cmd_name">输出格式</span>
@@ -22,10 +30,6 @@
         <div class="cmd_item">
           <span class="cmd_name">图片质量</span>
           <quality class="cmd_detail"></quality>
-        </div>
-        <div class="cmd_item">
-          <span class="cmd_name">图片旋转</span>
-          <rotate class="cmd_detail"></rotate>
         </div>
       </div>
       <div class="effect_container">
@@ -36,6 +40,7 @@
 </template>
 
 <script>
+import autoOrient from './autoOrient'
 import crop from './crop'
 import imgEffect from './imgEffect'
 import outputFormat from './outputFormat'
@@ -50,6 +55,7 @@ export default {
     }
   },
   components: {
+    autoOrient,
     crop,
     imgEffect,
     outputFormat,

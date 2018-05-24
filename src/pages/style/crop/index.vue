@@ -1,27 +1,38 @@
 <template>
   <div >
     <div>
-      <el-radio v-model="cropType" label="1" border>不剪裁</el-radio>
-      <el-radio v-model="cropType" label="2" border>抠图</el-radio>
-      <el-radio v-model="cropType" label="3" border>裁剪边缘</el-radio>
+      <el-radio v-model="cropType" label="" border>不剪裁</el-radio>
+      <el-radio v-model="cropType" label="cutout" border>抠图</el-radio>
+      <el-radio v-model="cropType" label="cutMargin" border>裁剪边缘</el-radio>
     </div>
-    <cutout v-if="cropType === '2'"></cutout>
-    <cut-margin v-if="cropType === '3'"></cut-margin>
+    <cropParam v-if="cropType !== ''" :cropType="cropType"></cropParam>
   </div>
 </template>
 
 <script>
-import cutout from './cutout'
-import cutMargin from './cutMargin'
+import { mapMutations } from 'vuex'
+import cropParam from './cropParam'
 export default {
   data () {
-    return {
-      cropType: '1'
-    }
+    return {}
   },
   components: {
-    cutout,
-    cutMargin
+    cropParam
+  },
+  computed: {
+    cropType: {
+      get () {
+        return this.$store.state.userImgStyle.cropType
+      },
+      set (value) {
+        this.SET_CROP_TYPE(value)
+      }
+    }
+  },
+  methods: {
+    ...mapMutations([
+      'SET_CROP_TYPE'
+    ])
   }
 }
 </script>

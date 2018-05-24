@@ -8,8 +8,8 @@
       <div class="sample_img_wrapper">
         <img src="@/assets/crop/crop-sample-img.png">
         <div class="gravity" :class="gravityActiveClass"></div>
-        <div :class="originalCropBoxClass"></div>
-        <div class="final" :class="cropBoxClass" :style="offsetStyle" v-if="cropType === '2'"></div>
+        <div class="original" :class="originalCropBoxClass"></div>
+        <div class="final" :class="cropBoxClass" :style="offsetStyle" v-if="cropType === 'cutout'"></div>
       </div>
     </div>
     <div class="crop_params_wrapper">
@@ -36,24 +36,53 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 export default {
   data () {
-    return {
-      paramType: 'wh',
-      cropWidth: 200,
-      cropHeight: 200,
-      cropPercent: 20
-    }
+    return {}
   },
   props: ['cropType'],
   computed: {
     ...mapState({
-      selectedGravity: state => state.userImgStyle.selectedGravity,
+      selectedGravity (state) {
+        return state.userImgStyle.cropGravity[this.cropType]
+      },
       xOffset: state => state.userImgStyle.cropXOffset,
       yOffset: state => state.userImgStyle.cropYOffset,
       offsetType: state => state.userImgStyle.cropOffsetType
     }),
+    paramType: {
+      get () {
+        return this.$store.state.userImgStyle.cropParamType
+      },
+      set (value) {
+        return this.SET_CROP_PARAM_TYPE(value)
+      }
+    },
+    cropWidth: {
+      get () {
+        return this.$store.state.userImgStyle.cropWidth
+      },
+      set (value) {
+        return this.SET_CROP_WIDTH(value)
+      }
+    },
+    cropHeight: {
+      get () {
+        return this.$store.state.userImgStyle.cropHeight
+      },
+      set (value) {
+        return this.SET_CROP_HEIGHT(value)
+      }
+    },
+    cropPercent: {
+      get () {
+        return this.$store.state.userImgStyle.cropPercent
+      },
+      set (value) {
+        return this.SET_CROP_PERCENT(value)
+      }
+    },
     gravityActiveClass: function () {
       return {
         'center': this.selectedGravity === 'Center',
@@ -65,7 +94,7 @@ export default {
       }
     },
     cropBoxClass: function () {
-      if (this.cropType === '2') {
+      if (this.cropType === 'cutout') {
         return {
           'crop_box_wh': this.paramType === 'wh',
           'crop_box_p': this.paramType === 'p',
@@ -76,9 +105,9 @@ export default {
       return {}
     },
     originalCropBoxClass: function () {
-      const c = this.cropBoxClass
-      if (this.cropType === '2') {
-        c['final'] = true
+      const c = Object.assign({}, this.cropBoxClass)
+      if (this.cropType === 'cutout') {
+        c['original'] = true
       } else {
         c['crop_box_full'] = true
         c['margin_top_h'] = true
@@ -86,7 +115,7 @@ export default {
       return c
     },
     offsetStyle: function () {
-      if (this.cropType !== '2' || this.selectedGravity !== 'NorthWest' || this.offsetType === '0') {
+      if (this.cropType !== 'cutout' || this.selectedGravity !== 'NorthWest' || this.offsetType === '0') {
         return {}
       }
       let xOffset = '0px'
@@ -106,14 +135,20 @@ export default {
       }
     },
     originalBackground: function () {
-      if (this.cropType === '3') {
-        return {
-          
-        }
+      if (this.cropType === 'cutMargin') {
+        return {}
       } else {
         return {}
       }
     }
+  },
+  methods: {
+    ...mapMutations([
+      'SET_CROP_PARAM_TYPE',
+      'SET_CROP_WIDTH',
+      'SET_CROP_HEIGHT',
+      'SET_CROP_PERCENT'
+    ])
   }
 }
 </script>

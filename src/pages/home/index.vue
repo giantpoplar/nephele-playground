@@ -52,7 +52,7 @@ export default {
 
 <style lang="scss" scoped>
   @mixin contentBorder{
-      max-width: 1600px;
+      max-width: 1400px;
       margin-right: auto;
       margin-left: auto;
   }

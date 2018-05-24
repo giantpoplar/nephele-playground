@@ -30,28 +30,24 @@ export default {
     }
   },
   props: {
+    cropType: String,
     validGravity: Array,
-    initGravity: String,
     gravityImg: String,
     hint: String
   },
   computed: {
     selectedGravity: {
       get () {
-        return this.$store.state.userImgStyle.selectedGravity
+        return this.$store.state.userImgStyle.cropGravity[this.cropType]
       },
       set (value) {
-        this.SET_SELECTED_GRAVITY(value)
+        this.SET_CROP_GRAVITY(value)
       }
     }
   },
-  created () {
-    console.log(this.initGravity)
-    this.SET_SELECTED_GRAVITY(this.initGravity)
-  },
   methods: {
     ...mapMutations([
-      'SET_SELECTED_GRAVITY'
+      'SET_CROP_GRAVITY'
     ]),
     isGravityInvalid: function (gravity) {
       if (this.validGravity.indexOf(gravity) !== -1) {

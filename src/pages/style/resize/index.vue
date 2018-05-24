@@ -1,15 +1,16 @@
 <template>
 <div>
     <div>
-      <el-radio v-model="resizeType" label="1" border>不缩放</el-radio>
-      <el-radio v-model="resizeType" label="2" border>固定宽高缩放</el-radio>
-      <el-radio v-model="resizeType" label="3" border>比例缩放</el-radio>
+      <el-radio v-model="resizeMode" label="" border>不缩放</el-radio>
+      <el-radio v-model="resizeMode" label="fixed" border>固定宽高缩放</el-radio>
+      <el-radio v-model="resizeMode" label="lfit" border>比例缩放</el-radio>
     </div>
-    <imgLabels :initResizeType="initResizeType" v-if="resizeType !== '1'" :listTypes="listTypes" ></imgLabels>
+    <imgLabels  v-if="resizeMode !== ''" :listTypes="listTypes" ></imgLabels>
 </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import imgLabels from './imgLabels.vue'
 import imgLableParams from './imgLabelParams.vue'
 export default {
@@ -24,19 +25,25 @@ export default {
   },
   computed: {
     listTypes: function () {
-      if (this.resizeType === '2') {
+      if (this.resizeMode === 'fixed') {
         return ['resize-wh-force']
-      } else if (this.resizeType === '3') {
+      } else if (this.resizeMode === 'lfit') {
         return ['resize-h-w-auto', 'resize-w-h-auto', 'resize-wh-contain', 'resize-wh-percent']
       }
     },
-    initResizeType: function () {
-      if (this.resizeType === '2') {
-        return 'resize-wh-force'
-      } else if (this.resizeType === '3') {
-        return 'resize-h-w-auto'
+    resizeMode: {
+      get () {
+        return this.$store.state.userImgStyle.resizeMode
+      },
+      set (value) {
+        this.SET_RESIZE_MODE(value)
       }
     }
+  },
+  methods: {
+    ...mapMutations([
+      'SET_RESIZE_MODE'
+    ])
   }
 }
 </script>

@@ -28,12 +28,10 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      watermarkGravity: 'se',
-      watermarkPaddingX: 10,
-      watermarkPaddingY: 10,
       gravities: [
         {id: 'nw', name: '左上'},
         {id: 'north', name: '中上'},
@@ -47,7 +45,38 @@ export default {
       ]
     }
   },
+  computed: {
+    watermarkGravity: {
+      get () {
+        return this.$store.state.userImgStyle.watermarkGravity
+      },
+      set (value) {
+        this.SET_WATERMAKR_GRAVITY(value)
+      }
+    },
+    watermarkPaddingX: {
+      get () {
+        return this.$store.state.userImgStyle.watermarkPaddingX
+      },
+      set (value) {
+        this.SET_WATERMARK_PADDING_X(value)
+      }
+    },
+    watermarkPaddingY: {
+      get () {
+        return this.$store.state.userImgStyle.watermarkPaddingY
+      },
+      set (value) {
+        this.SET_WATERMARK_PADDING_Y(value)
+      }
+    }
+  },
   methods: {
+    ...mapMutations([
+      'SET_WATERMARK_GRAVITY',
+      'SET_WATERMARK_PADDING_X',
+      'SET_WATERMARK_PADDING_Y'
+    ]),
     labelActiveStyle: function (gravityId) {
       if (this.watermarkGravity === gravityId) {
         return {

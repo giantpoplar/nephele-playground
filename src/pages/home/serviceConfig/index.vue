@@ -5,10 +5,10 @@
     <el-dialog title="图片服务配置" :visible.sync="configFormVisible">
     <el-form>
       <el-form-item label="服务域名或IP">
-        <el-input v-model="service.ip" auto-complete="off"></el-input>
+        <el-input v-model="serviceHost" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="服务端口">
-        <el-input v-model="service.port" auto-complete="off"></el-input>
+        <el-input v-model="servicePort" auto-complete="off"></el-input>
       </el-form-item>
     </el-form>
   <div slot="footer" class="dialog-footer">
@@ -20,17 +20,36 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      configFormVisible: false,
-      service: {
-        ip: '192.168.1.1',
-        port: '80'
+      configFormVisible: false
+    }
+  },
+  computed: {
+    serviceHost: {
+      get () {
+        return this.$store.state.app.nepheleService.host
+      },
+      set (value) {
+        this.SET_NEPHELE_SERVICE_HOST(value)
+      }
+    },
+    servicePort: {
+      get () {
+        return this.$store.state.app.nepheleService.port
+      },
+      set (value) {
+        this.SET_NEPHELE_SERVICE_Port(value)
       }
     }
   },
   methods: {
+    ...mapMutations([
+      'SET_NEPHELE_SERVICE_HOST',
+      'SET_NEPHELE_SERVICE_PORT'
+    ]),
     saveConfig () {
       this.configFormVisible = false
       this.$notify({
