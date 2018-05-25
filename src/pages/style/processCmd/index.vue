@@ -72,9 +72,14 @@ export default {
         case '':
           return ''
         default:
-          resizeCmd.push(`resize,m_${this.resizeMode}`)
+          if (this.resizeType[this.resizeMode] === 'resize-wh-adapt') {
+            resizeCmd.push('crop,m_resize')
+          } else {
+            resizeCmd.push(`resize,m_${this.resizeMode}`)
+          }
       }
       switch (this.resizeType[this.resizeMode]) {
+        case 'resize-wh-adapt':
         case 'resize-wh-force':
         case 'resize-wh-contain':
           resizeCmd.push(`w_${this.resizeWidth},h_${this.resizeHeight}`)

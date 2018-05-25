@@ -18,8 +18,12 @@
         <template slot="append">%</template>
       </el-input>
     </div>
-    <div class="input_wrapper">
+    <div class="limit_input_warpper">
       <span>允许结果图大于原图</span>
+      <el-tooltip effect="light" content="" placement="right">
+        <div slot="content" class="tooltip_content">开启后，当指定宽或高大于原图时，会对图片进行放大处理；否则直接返回原图</div>
+        <i class="el-icon-question"></i>
+      </el-tooltip>
       <el-switch v-model="limit">
       </el-switch>
     </div>
@@ -67,14 +71,14 @@ export default {
     },
     isWidthParmShow: function () {
       const t = this.selectedResizeType
-      if (t === 'resize-w-h-auto' || t === 'resize-wh-contain' || t === 'resize-wh-force') {
+      if (t === 'resize-w-h-auto' || t === 'resize-wh-contain' || t === 'resize-wh-force' || t === 'resize-wh-adapt') {
         return true
       }
       return false
     },
     isHeightParmShow: function () {
       const t = this.selectedResizeType
-      if (t === 'resize-h-w-auto' || t === 'resize-wh-contain' || t === 'resize-wh-force') {
+      if (t === 'resize-h-w-auto' || t === 'resize-wh-contain' || t === 'resize-wh-force' || t === 'resize-wh-adapt') {
         return true
       }
       return false
@@ -100,6 +104,11 @@ export default {
 
 <style lang="scss" scoped>
   @import 'src/styles/mixin';
+   .tooltip_content {
+      word-wrap: break-word;
+      word-break: normal;
+      width: 206px;
+  }
   .img_label_params_container {
     padding-top: 30px;
     border-top: 1px solid #f0f3fa;
@@ -107,16 +116,28 @@ export default {
     flex-direction: row;
     align-items: center;
     .input_wrapper {
-      float: left;
-      position: relative;
       margin-right: 30px;
       span{
-        margin-right: 10px;
         font-size: 14px;
-        color: $secondaryTextColor
+        color: $secondaryTextColor;
+        margin-right: 10px;
       }
       .number_input {
         width: 150px
+      }
+    }
+    .limit_input_warpper {
+      margin-right: 30px;
+      span{
+        font-size: 14px;
+        color: $secondaryTextColor
+      }
+      i {
+        position: relative;
+        top: -5px;
+        font-size: 13px;
+        color: $placeholderTextColor;
+         margin-right: 10px;
       }
     }
   }

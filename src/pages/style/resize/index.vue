@@ -28,7 +28,7 @@ export default {
       if (this.resizeMode === 'fixed') {
         return ['resize-wh-force']
       } else if (this.resizeMode === 'lfit') {
-        return ['resize-h-w-auto', 'resize-w-h-auto', 'resize-wh-contain', 'resize-wh-percent']
+        return ['resize-wh-adapt', 'resize-h-w-auto', 'resize-w-h-auto', 'resize-wh-contain', 'resize-wh-percent']
       }
     },
     resizeMode: {

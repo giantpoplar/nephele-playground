@@ -38,7 +38,7 @@ const userImgStyle = {
     resizeMode: '',
     resizeType: {
       fixed: 'resize-wh-force',
-      lfit: 'resize-h-w-auto'
+      lfit: 'resize-wh-adapt'
     },
     resizeWidth: 200,
     resizeHeight: 200,
