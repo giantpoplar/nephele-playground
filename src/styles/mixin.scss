@@ -8,3 +8,9 @@ $placeholderTextColor: #C0C4CC;
   flex-direction: row;
   align-items: $type;
 }
+
+.tooltip_content {
+  word-wrap: break-word;
+  word-break: normal;
+  width: 206px;
+}

@@ -51,7 +51,7 @@ export default {
         return this.$store.state.userImgStyle.watermarkGravity
       },
       set (value) {
-        this.SET_WATERMAKR_GRAVITY(value)
+        this.SET_WATERMARK_GRAVITY(value)
       }
     },
     watermarkPaddingX: {

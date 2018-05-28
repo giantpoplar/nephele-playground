@@ -8,18 +8,22 @@
       <div class="sample_img_wrapper">
         <img src="@/assets/crop/crop-sample-img.png">
         <div class="gravity" :class="gravityActiveClass"></div>
-        <div class="original" :class="originalCropBoxClass"></div>
-        <div class="final" :class="cropBoxClass" :style="offsetStyle" v-if="cropType === 'cutout'"></div>
+        <div class="original" :class="cropBoxClass" v-if="cropType === 'cutout'"></div>
+        <div class="final" :class="cropBoxClass" :style="offsetStyle" ></div>
       </div>
     </div>
+    <div class="center_gravity_margin_mode" v-if="cropType === 'cutMargin' && selectedGravity === 'Center'">
+      <el-radio v-model="centerGravityMarginMode" label="wc"  border>裁剪左右边</el-radio>
+      <el-radio v-model="centerGravityMarginMode" label="hc"  border>裁剪上下边</el-radio>
+    </div>
     <div class="crop_params_wrapper">
-      <div class="input_wrapper" v-if="paramType === 'wh'">
+      <div class="input_wrapper" v-if="showWidthParam">
         <span>宽度</span>
         <el-input placeholder="1-9999" v-model="cropWidth" class="number_input" size="medium" type="number" min="1" max="9999">
           <template slot="append">PX</template>
         </el-input>
       </div>
-      <div class="input_wrapper" v-if="paramType === 'wh'">
+      <div class="input_wrapper" v-if="showHeightParam">
         <span>高度</span>
         <el-input placeholder="1-9999" v-model="cropHeight" class="number_input" size="medium" type="number" min="1" max="9999">
           <template slot="append">PX</template>
@@ -59,6 +63,14 @@ export default {
         return this.SET_CROP_PARAM_TYPE(value)
       }
     },
+    centerGravityMarginMode: {
+      get () {
+        return this.$store.state.userImgStyle.cropCenterGravityMarginMode
+      },
+      set (value) {
+        this.SET_CROP_CENTER_GRAVITY_MARGIN_MODE(value)
+      }
+    },
     cropWidth: {
       get () {
         return this.$store.state.userImgStyle.cropWidth
@@ -93,26 +105,36 @@ export default {
         'south': this.selectedGravity === 'South'
       }
     },
+    cutoutBoxClass: function () {
+      return {
+        'crop_box_wh': this.paramType === 'wh',
+        'crop_box_p': this.paramType === 'p',
+        'north_west': this.selectedGravity === 'NorthWest',
+        'center': this.selectedGravity === 'Center'
+      }
+    },
+    cutMariginBoxClass: function () {
+      return {
+        crop_box_full: true,
+        margin_top_h: this.paramType === 'wh' && this.selectedGravity === 'North',
+        margin_top_p: this.paramType === 'p' && this.selectedGravity === 'North',
+        margin_bottom_h: this.paramType === 'wh' && this.selectedGravity === 'South',
+        margin_bottom_p: this.paramType === 'p' && this.selectedGravity === 'South',
+        margin_left_w: this.paramType === 'wh' && this.selectedGravity === 'West',
+        margin_left_p: this.paramType === 'p' && this.selectedGravity === 'West',
+        margin_right_w: this.paramType === 'wh' && this.selectedGravity === 'East',
+        margin_right_p: this.paramType === 'p' && this.selectedGravity === 'East',
+        margin_center_h_p: this.paramType === 'p' && this.selectedGravity === 'Center' && this.centerGravityMarginMode === 'hc',
+        margin_center_h: this.paramType === 'wh' && this.selectedGravity === 'Center' && this.centerGravityMarginMode === 'hc',
+        margin_center_w_p: this.paramType === 'p' && this.selectedGravity === 'Center' && this.centerGravityMarginMode === 'wc',
+        margin_center_w: this.paramType === 'wh' && this.selectedGravity === 'Center' && this.centerGravityMarginMode === 'wc'
+      }
+    },
     cropBoxClass: function () {
       if (this.cropType === 'cutout') {
-        return {
-          'crop_box_wh': this.paramType === 'wh',
-          'crop_box_p': this.paramType === 'p',
-          'north_west': this.selectedGravity === 'NorthWest',
-          'center': this.selectedGravity === 'Center'
-        }
+        return this.cutoutBoxClass
       }
-      return {}
-    },
-    originalCropBoxClass: function () {
-      const c = Object.assign({}, this.cropBoxClass)
-      if (this.cropType === 'cutout') {
-        c['original'] = true
-      } else {
-        c['crop_box_full'] = true
-        c['margin_top_h'] = true
-      }
-      return c
+      return this.cutMariginBoxClass
     },
     offsetStyle: function () {
       if (this.cropType !== 'cutout' || this.selectedGravity !== 'NorthWest' || this.offsetType === '0') {
@@ -134,12 +156,33 @@ export default {
         transform: `translateX(${xOffset}) translateY(${yOffset})`
       }
     },
-    originalBackground: function () {
-      if (this.cropType === 'cutMargin') {
-        return {}
-      } else {
-        return {}
+    showWidthParam () {
+      if (this.paramType === 'wh') {
+        if (this.cropType === 'cutout') {
+          return true
+        }
+        if (this.selectedGravity === 'West' || this.selectedGravity === 'East') {
+          return true
+        }
+        if (this.selectedGravity === 'Center' && this.centerGravityMarginMode === 'wc') {
+          return true
+        }
       }
+      return false
+    },
+    showHeightParam () {
+      if (this.paramType === 'wh') {
+        if (this.cropType === 'cutout') {
+          return true
+        }
+        if (this.selectedGravity === 'South' || this.selectedGravity === 'North') {
+          return true
+        }
+        if (this.selectedGravity === 'Center' && this.centerGravityMarginMode === 'hc') {
+          return true
+        }
+      }
+      return false
     }
   },
   methods: {
@@ -147,7 +190,8 @@ export default {
       'SET_CROP_PARAM_TYPE',
       'SET_CROP_WIDTH',
       'SET_CROP_HEIGHT',
-      'SET_CROP_PERCENT'
+      'SET_CROP_PERCENT',
+      'SET_CROP_CENTER_GRAVITY_MARGIN_MODE'
     ])
   }
 }
@@ -193,6 +237,39 @@ export default {
         left: 0;
         &.margin_top_h {
           background: url(../../../assets/crop/crop-margin-top-h.png) no-repeat 50%/100%
+        }
+        &.margin_top_p {
+          background: url(../../../assets/crop/crop-margin-top-p.png) no-repeat 50%/100%
+        }
+        &.margin_bottom_h {
+          background: url(../../../assets/crop/crop-margin-bottom-h.png) no-repeat 50%/100%
+        }
+        &.margin_bottom_p {
+          background: url(../../../assets/crop/crop-margin-bottom-p.png) no-repeat 50%/100%
+        }
+        &.margin_left_w {
+          background: url(../../../assets/crop/crop-margin-left-w.png) no-repeat 50%/100%
+        }
+        &.margin_left_p {
+          background: url(../../../assets/crop/crop-margin-left-p.png) no-repeat 50%/100%
+        }
+        &.margin_right_w {
+          background: url(../../../assets/crop/crop-margin-right-w.png) no-repeat 50%/100%
+        }
+        &.margin_right_p {
+          background: url(../../../assets/crop/crop-margin-right-p.png) no-repeat 50%/100%
+        }
+        &.margin_center_h {
+          background: url(../../../assets/crop/crop-margin-center-h.png) no-repeat 50%/100%
+        }
+        &.margin_center_h_p {
+          background: url(../../../assets/crop/crop-margin-center-h-p.png) no-repeat 50%/100%
+        }
+         &.margin_center_w {
+          background: url(../../../assets/crop/crop-margin-center-w.png) no-repeat 50%/100%
+        }
+        &.margin_center_w_p {
+          background: url(../../../assets/crop/crop-margin-center-w-p.png) no-repeat 50%/100%
         }
       }
       .crop_box_wh {
@@ -249,6 +326,9 @@ export default {
       }
     }
   };
+  .center_gravity_margin_mode {
+    margin-bottom: 20px
+  }
   .crop_params_wrapper {
       @include fa();
       .input_wrapper {

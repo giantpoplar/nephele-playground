@@ -72,11 +72,6 @@ export default {
   .gray_border {
     border:1px solid #dcdfe5;
   }
-  .tooltip_content {
-      word-wrap: break-word;
-      word-break: normal;
-      width: 206px;
-  }
   .img_labels_container {
     display: flex;
     flex-direction: row;

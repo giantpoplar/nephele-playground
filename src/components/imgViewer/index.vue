@@ -9,9 +9,9 @@
         class="error_alert"
         title="图片加载出错"
         type="info"
-        :description="errDescription"
         :closable="false"
         show-icon>
+        <div class="err_description">{{ errDescription }}</div>
       </el-alert>
     </div>
     <div class="reload_btn_wrapper" v-if="enableReload">
@@ -85,6 +85,11 @@ export default {
 
 <style lang="scss" scoped>
   @import 'src/styles/mixin';
+  .err_description {
+    font-size: 12px;
+    margin: 5px 0 0;
+    word-break: break-all;
+  }
   .img_viewer_container {
     .img_info {
       font-size: 14px;

@@ -4,7 +4,7 @@
     <div class="process_cmd">
       <div class="process_cmd_codes">{{ cmd }}</div>
       <div class="cmd_copy">
-        <div class="cmd_text_wrap">
+        <div class="cmd_text_wrap" @click="doCopy">
           <a>复制命令</a>
         </div>
       </div>
@@ -35,6 +35,7 @@ export default {
       cropXOffset: state => state.userImgStyle.cropXOffset,
       cropYOffset: state => state.userImgStyle.cropYOffset,
       cropGravity: state => state.userImgStyle.cropGravity,
+      cropCenterGravityMarginMode: state => state.userImgStyle.cropCenterGravityMarginMode,
       // format
       format: state => state.userImgStyle.format,
       // quality
@@ -132,14 +133,20 @@ export default {
               break
             case 'West':
               cropCmd.push('crop,m_l')
-              cropCmd.push(this.cropParamType === 'wh' ? `w_${this.cropHeight}` : `p_${this.cropPercent}`)
+              cropCmd.push(this.cropParamType === 'wh' ? `w_${this.cropWidth}` : `p_${this.cropPercent}`)
               break
             case 'East':
               cropCmd.push('crop,m_r')
-              cropCmd.push(this.cropParamType === 'wh' ? `w_${this.cropHeight}` : `p_${this.cropPercent}`)
+              cropCmd.push(this.cropParamType === 'wh' ? `w_${this.cropWidth}` : `p_${this.cropPercent}`)
               break
             case 'Center':
-              cropCmd.push()
+              if (this.cropCenterGravityMarginMode === 'wc') {
+                cropCmd.push('crop,m_wc')
+                cropCmd.push(this.cropParamType === 'wh' ? `w_${this.cropWidth}` : `p_${this.cropPercent}`)
+              } else {
+                cropCmd.push('crop,m_hc')
+                cropCmd.push(this.cropParamType === 'wh' ? `w_${this.cropHeight}` : `p_${this.cropPercent}`)
+              }
           }
           break
       }
@@ -149,7 +156,7 @@ export default {
       if (this.format === 'same') {
         return ''
       }
-      return `format,v=${this.format}/`
+      return `format,v_${this.format}/`
     },
     qualityCmd: function () {
       if (this.qualityType === '0') {
@@ -178,7 +185,20 @@ export default {
   methods: {
     ...mapMutations([
       'SET_STYLE_CMD'
-    ])
+    ]),
+    doCopy: function (e) {
+      this.$copyText(this.cmd).then(() => {
+        this.$message({
+          message: '已复制到剪切板',
+          type: 'success'
+        })
+      }, () => {
+        this.$message({
+          message: '复制到剪切板失败',
+          type: 'error'
+        })
+      })
+    }
   }
 }
 </script>

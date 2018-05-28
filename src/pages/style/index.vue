@@ -20,7 +20,10 @@
           <watermark class="cmd_detail"></watermark>
         </div>
         <div class="cmd_item">
-          <span class="cmd_name">自动旋正</span>
+          <div class="cmd_name">
+            <span >自动旋正</span>
+            <question-icon :tooltip="'开启后，会根据图片EXIF中的信息进行旋转'" :iconSize="14"></question-icon>
+          </div>
           <auto-orient class="cmd_detail"></auto-orient>
         </div>
         <div class="cmd_item">
@@ -49,6 +52,7 @@ import quality from './quality'
 import resize from './resize'
 import rotate from './rotate'
 import watermark from './watermark'
+import questionIcon from '@/components/questionIcon'
 export default {
   data () {
     return {
@@ -60,6 +64,7 @@ export default {
     imgEffect,
     outputFormat,
     processCmd,
+    questionIcon,
     quality,
     resize,
     rotate,

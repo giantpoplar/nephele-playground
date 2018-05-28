@@ -10,7 +10,6 @@
 <script>
 import { mapState } from 'vuex'
 import imgViewer from '@/components/imgViewer'
-// import sohoImg from '../../../assets/soho.jpg'
 export default {
   data () {
     return {

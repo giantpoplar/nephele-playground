@@ -9,6 +9,7 @@ import {
   SET_CROP_X_OFFSET,
   SET_CROP_Y_OFFSET,
   SET_CROP_OFFSET_TYPE,
+  SET_CROP_CENTER_GRAVITY_MARGIN_MODE,
   SET_FORMAT,
   SET_QUALITY_TYPE,
   SET_QUALITY,
@@ -57,6 +58,7 @@ const userImgStyle = {
     cropOffsetType: '0',
     cropXOffset: 0,
     cropYOffset: 0,
+    cropCenterGravityMarginMode: 'wc',
     // watermark paramter
     watermarkType: '0',
     watermarkName: 'wm1.png',
@@ -109,6 +111,9 @@ const userImgStyle = {
     },
     [SET_CROP_OFFSET_TYPE] (state, offsetType) {
       state.cropOffsetType = offsetType
+    },
+    [SET_CROP_CENTER_GRAVITY_MARGIN_MODE] (state, mode) {
+      state.cropCenterGravityMarginMode = mode
     },
     [SET_FORMAT] (state, format) {
       state.format = format
