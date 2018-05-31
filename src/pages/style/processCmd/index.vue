@@ -17,6 +17,7 @@ import { mapState, mapMutations } from 'vuex'
 export default {
   computed: {
     ...mapState({
+      cmdOrder: state => state.userImgStyle.cmdOrder,
       autoOrient: state => state.userImgStyle.autoOrient,
       // resize
       resizeMode: state => state.userImgStyle.resizeMode,
@@ -56,7 +57,19 @@ export default {
       watermarkSrcLimitHeight: state => state.userImgStyle.watermarkSrcLimitHeight
     }),
     cmd: function () {
-      let processCmd = `x-nephele-process=image/${this.resize}${this.crop}${this.rotate}${this.watermark}${this.autoOrientCmd}${this.qualityCmd}${this.outFormat}`
+      const m = {
+        'resize': this.resize,
+        'crop': this.crop,
+        'rotate': this.rotate,
+        'watermark': this.watermark,
+        'autoorient': this.autoOrientCmd,
+        'quality': this.qualityCmd,
+        'format': this.outFormat
+      }
+      let processCmd = `x-nephele-process=image/`
+      for (let c of this.cmdOrder) {
+        processCmd += m[c]
+      }
       processCmd = processCmd.substr(0, processCmd.length - 1)
       this.SET_STYLE_CMD(processCmd)
       return processCmd

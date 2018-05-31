@@ -19,8 +19,7 @@
       </el-input>
     </div>
     <div class="limit_input_warpper">
-      <span>允许结果图大于原图</span>
-      <question-icon :tooltip="'开启后，当指定宽或高大于原图时，会对图片进行放大处理；否则直接返回原图'"></question-icon>
+      <tag tooltip="开启后，当指定宽或高大于原图时，会对图片进行放大处理；否则直接返回原图" name="允许结果图大于原图" class="tag"></tag>
       <el-switch v-model="limit">
       </el-switch>
     </div>
@@ -29,7 +28,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import questionIcon from '@/components/questionIcon'
+import tag from '@/components/tag'
 export default {
   data () {
     return {}
@@ -90,7 +89,7 @@ export default {
   },
   props: ['selectedResizeType'],
   components: {
-    questionIcon
+    tag
   },
   methods: {
     ...mapMutations([
@@ -124,9 +123,10 @@ export default {
     }
     .limit_input_warpper {
       margin-right: 30px;
-      span{
+      .tag{
         font-size: 14px;
-        color: $secondaryTextColor
+        color: $secondaryTextColor;
+        display: inline-block
       }
       i {
         position: relative;

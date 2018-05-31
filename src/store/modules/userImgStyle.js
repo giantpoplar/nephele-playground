@@ -1,5 +1,6 @@
 import {
   SET_AUTO_ORIENT,
+  SET_CMD_ORDER,
   SET_CROP_TYPE,
   SET_CROP_GRAVITY,
   SET_CROP_PARAM_TYPE,
@@ -34,6 +35,7 @@ import {
 } from '../mutation-types'
 const userImgStyle = {
   state: {
+    cmdOrder: ['resize', 'crop', 'rotate', 'watermark', 'autoorient', 'format', 'quality'],
     autoOrient: '0',
     // resize parameter
     resizeMode: '',
@@ -84,6 +86,9 @@ const userImgStyle = {
   mutations: {
     [SET_AUTO_ORIENT] (state, auto) {
       state.autoOrient = auto
+    },
+    [SET_CMD_ORDER] (state, order) {
+      state.cmdOrder = order
     },
     [SET_CROP_TYPE] (state, type) {
       state.cropType = type

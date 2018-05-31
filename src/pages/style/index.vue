@@ -2,39 +2,14 @@
   <div>
     <processCmd></processCmd>
     <div class="style_container">
-      <div class="cmd_container">
-        <div class="cmd_item">
-          <span class="cmd_name">缩放方式</span>
-          <resize class="cmd_detail"></resize>
-        </div>
-        <div class="cmd_item">
-          <span class="cmd_name">图片剪裁</span>
-          <crop class="cmd_detail"></crop>
-        </div>
-        <div class="cmd_item">
-          <span class="cmd_name">图片旋转</span>
-          <rotate class="cmd_detail"></rotate>
-        </div>
-        <div class="cmd_item">
-          <span class="cmd_name">图片水印</span>
-          <watermark class="cmd_detail"></watermark>
-        </div>
-        <div class="cmd_item">
-          <div class="cmd_name">
-            <span >自动旋正</span>
-            <question-icon :tooltip="'开启后，会根据图片EXIF中的信息进行旋转'" :iconSize="14"></question-icon>
+      <draggable v-model="cmds" class="cmd_container">
+        <transition-group>
+          <div class="cmd_item" v-for="cmd in cmds" :key="cmd">
+            <tag class="cmd_name" :name="items[cmd].title.name" :tooltip="items[cmd].title.tooltip" :iconSize="items[cmd].title.iconSize"></tag>
+            <component :is="items[cmd].component" class="cmd_detail"></component>
           </div>
-          <auto-orient class="cmd_detail"></auto-orient>
-        </div>
-        <div class="cmd_item">
-          <span class="cmd_name">输出格式</span>
-          <output-format class="cmd_detail"></output-format>
-        </div>
-        <div class="cmd_item">
-          <span class="cmd_name">图片质量</span>
-          <quality class="cmd_detail"></quality>
-        </div>
-      </div>
+        </transition-group>
+      </draggable>
       <div class="effect_container">
         <img-effect></img-effect>
       </div>
@@ -43,6 +18,7 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 import autoOrient from './autoOrient'
 import crop from './crop'
 import imgEffect from './imgEffect'
@@ -52,10 +28,67 @@ import quality from './quality'
 import resize from './resize'
 import rotate from './rotate'
 import watermark from './watermark'
-import questionIcon from '@/components/questionIcon'
+import tag from '@/components/tag'
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
+      items: {
+        'resize': {
+          title: {
+            name: '图片缩放'
+          },
+          component: 'resize'
+        },
+        'crop': {
+          title: {
+            name: '图片剪裁'
+          },
+          component: 'crop'
+        },
+        'rotate': {
+          title: {
+            name: '图片旋转'
+          },
+          component: 'rotate'
+        },
+        'watermark': {
+          title: {
+            name: '图片水印'
+          },
+          component: 'watermark'
+        },
+        'autoorient': {
+          title: {
+            name: '自动旋正',
+            tooltip: '开启后，会根据图片EXIF中的信息进行旋转',
+            iconSize: 14
+          },
+          component: 'auto-orient'
+        },
+        'format': {
+          title: {
+            name: '输出格式'
+          },
+          component: 'output-format'
+        },
+        'quality': {
+          title: {
+            name: '图片质量'
+          },
+          component: 'quality'
+        }
+      }
+    }
+  },
+  computed: {
+    cmds: {
+      get () {
+        return this.$store.state.userImgStyle.cmdOrder
+      },
+      set (value) {
+        this.SET_CMD_ORDER(value)
+      }
     }
   },
   components: {
@@ -64,11 +97,17 @@ export default {
     imgEffect,
     outputFormat,
     processCmd,
-    questionIcon,
+    tag,
     quality,
     resize,
     rotate,
-    watermark
+    watermark,
+    draggable
+  },
+  methods: {
+    ...mapMutations([
+      'SET_CMD_ORDER'
+    ])
   }
 }
 </script>

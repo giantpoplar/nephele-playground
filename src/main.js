@@ -4,6 +4,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 import ElementUI from 'element-ui'
 import VueClipboard from 'vue-clipboard2'
+import draggable from 'vuedraggable'
 import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import router from './router'
@@ -14,6 +15,7 @@ Vue.use(ElementUI, {
 })
 Vue.use(VueResource)
 Vue.use(VueClipboard)
+Vue.use(draggable)
 
 Vue.config.productionTip = false
 

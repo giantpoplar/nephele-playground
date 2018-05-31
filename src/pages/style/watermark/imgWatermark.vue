@@ -23,8 +23,7 @@
     </div>
     <div class="sub_setting_item" :style="alignBaseline">
       <div class="sub_setting_label">
-        <span >原图限制</span>
-        <question-icon :tooltip="'原图的宽或高大于限定的宽高，将不做打水印处理'"></question-icon>
+        <tag name="原图限制" tooltip="原图的宽或高大于限定的宽高，将不做打水印处理"></tag>
       </div>
       <div class="sub_setting_content">
         <srcImgWatermarkLimit></srcImgWatermarkLimit>
@@ -35,7 +34,7 @@
 
 <script>
 import { formatPercent } from '@/utils'
-import questionIcon from '@/components/questionIcon'
+import tag from '@/components/tag'
 import srcImgWatermarkLimit from './srcImgWatermarkLimit'
 import watermarkPosition from './watermarkPosition'
 import { mapMutations } from 'vuex'
@@ -67,7 +66,7 @@ export default {
     }
   },
   components: {
-    questionIcon,
+    tag,
     srcImgWatermarkLimit,
     watermarkPosition
   },
